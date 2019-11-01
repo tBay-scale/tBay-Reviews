@@ -24,4 +24,5 @@ coverage
 build/
 dist/
 
-data.csv
+productsData.csv
+reviewsData.csv

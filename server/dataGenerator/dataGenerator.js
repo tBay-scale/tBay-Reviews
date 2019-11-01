@@ -2,9 +2,8 @@ const faker = require("faker");
 const LoremIpsum = require("lorem-ipsum").LoremIpsum;
 const fs = require("fs");
 
-const createDataSet = function(num) {
+const createProducts = function(num) {
   let products = [];
-  let reviews = [];
   for (let i = 0; i < num; i++) {
     // let datum = {};
     // datum.id = i;
@@ -12,14 +11,20 @@ const createDataSet = function(num) {
     let datum = [faker.name.firstName() + faker.name.lastName()];
     products.push(datum);
   }
+  return products;
+}
+
+const createReviews = function(num) {
+
+  let reviews = [];
 
   const makeText = new LoremIpsum({
     sentencesPerParagraph: {
       min: 1,
-      max: 4
+      max: 2
     },
     wordsPerSentence: {
-      max: 15,
+      max: 10,
       min: 4
     }
   })
@@ -41,46 +46,74 @@ const createDataSet = function(num) {
       // }
       let review = [
         Math.floor(Math.random() * 10),
-        makeText.generateParagraphs(Math.floor(Math.random() * 3) + 1),
+        makeText.generateParagraphs(1),
         faker.name.firstName() + faker.name.lastName(),
         faker.date.recent(),
         Math.floor(Math.random() * 2) === 0 ? true : false,
         Math.floor(Math.random() * 2) === 0 ? true : false,
+        Math.floor(Math.random() * 2) === 0 ? true: false,
+        Math.floor(Math.random() * 2) === 0 ? true: false,
         Math.floor(Math.random() * 12),
         Math.floor(Math.random() * 12)
       ]
-      review.push(review.rating > 5 ? true : false);
-      review.push(review.rating > 7 ? true: false);
       // review.wouldRecommend = review.rating > 5 ? true : false;
       // review.goodQuality = review.rating > 7 ? true: false;
       reviews.push(review);
     }
   }
 
-  return [products, reviews];
+  return reviews;
 }
 
-const convertToCSV = function(data) {
+const convertToCSV = function(data, numRepeats) {
   let output = "";
-  for (let i = 0; i < data.length; i++) {
-    for (let j = 0; j < data[i].length; j++) {
-      output = output + data[i][j] + ",";
+  for (let k = 0; k < numRepeats; k++) {
+    for (let i = 0; i < data.length; i++) {
+      for (let j = 0; j < data[i].length; j++) {
+        if (j !== data[i].length - 1) {
+          output = output + data[i][j] + ",";
+        } else {
+          output = output + data[i][j] + "\n"
+        }
+      }
     }
-    output = output.substring(0, output.length - 1) + "\n";
   }
-  output = output.substring(0, output.length - 2);
-
   return output;
 }
 
-const writeCSV = function(csvText) {
-  fs.writeFile("data.csv", csvText, (err) => {
-    if (err) throw err;
-    console.log("Saved");
+const writeCSV = function(productCSV, reviewCSV) {
+  fs.appendFile("productsData.csv", productCSV, (err) => {
+    if (err) {
+      throw err;
+    } else {
+      fs.appendFile("reviewsData.csv", reviewCSV, (err) => {
+        if (err) {
+          throw err;
+        } else {
+          console.log("Saved");
+        }
+      })
+    }
   })
 }
 
-writeCSV(convertToCSV(createDataSet(5)[1]));
+const duplicateDataSet = function(data, num) {
+  for (let i = 0; i < num; i++) {
+    for (let j = 0; j < data.length; j++) {
+      let newSet = [];
+      for (let k = 0; k < data[0].length; k++) {
+        newSet[k] = data[j][k];
+      }
+      data.push(newSet);
+    }
+  }
+  return data;
+}
 
-module.exports.createDataSet = createDataSet;
-module.exports.convertToCSV = convertToCSV;
+let productSet = createProducts(1000);
+let reviewSet = createReviews(1000);
+
+// productSet = duplicateDataSet(productSet, 10);
+// reviewSet = duplicateDataSet(reviewSet, 10);
+
+writeCSV(convertToCSV(productSet, 1000), convertToCSV(reviewSet, 1000));
