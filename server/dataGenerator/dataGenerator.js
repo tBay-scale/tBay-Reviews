@@ -5,9 +5,6 @@ const fs = require("fs");
 const createProducts = function(num) {
   let products = [];
   for (let i = 0; i < num; i++) {
-    // let datum = {};
-    // datum.id = i;
-    // datum.seller = faker.name.firstName() + faker.name.lastName();
     let datum = [faker.name.firstName() + faker.name.lastName()];
     products.push(datum);
   }
@@ -24,27 +21,15 @@ const createReviews = function(num) {
       max: 2
     },
     wordsPerSentence: {
-      max: 10,
-      min: 4
+      max: 5,
+      min: 2
     }
   })
 
   for (let i = 0; i < num; i++) {
-    for (let j = 0; j < 5; j++) {
-      // let review = {
-      //   id: reviewCounter,
-      //   rating: Math.floor(Math.random() * 10),
-      //   text: makeText.generateParagraphs(Math.floor(Math.random() * 3) + 1),
-      //   user: faker.name.firstName() + faker.name.lastName(),
-      //   createdAt: faker.date.recent(),
-
-      //   verified: Math.floor(Math.random() * 2) === 0 ? true : false,
-      //   goodValue: Math.floor(Math.random() * 2) === 0 ? true : false,
-      //   helpful: Math.floor(Math.random() * 12),
-      //   notHelpful: Math.floor(Math.random() * 12),
-      //   itemId: i
-      // }
+    for (let j = 0; j < 3; j++) {
       let review = [
+        0,
         Math.floor(Math.random() * 10),
         makeText.generateParagraphs(1),
         faker.name.firstName() + faker.name.lastName(),
@@ -56,8 +41,6 @@ const createReviews = function(num) {
         Math.floor(Math.random() * 12),
         Math.floor(Math.random() * 12)
       ]
-      // review.wouldRecommend = review.rating > 5 ? true : false;
-      // review.goodQuality = review.rating > 7 ? true: false;
       reviews.push(review);
     }
   }
@@ -65,10 +48,11 @@ const createReviews = function(num) {
   return reviews;
 }
 
-const convertToCSV = function(data, numRepeats) {
+const convertToCSV = function(data, numRepeats, batchNum) {
   let output = "";
   for (let k = 0; k < numRepeats; k++) {
     for (let i = 0; i < data.length; i++) {
+      data[i][0] = Math.floor(Math.random() * 5000000);
       for (let j = 0; j < data[i].length; j++) {
         if (j !== data[i].length - 1) {
           output = output + data[i][j] + ",";

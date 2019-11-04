@@ -4,10 +4,14 @@ CREATE DATABASE sdcdata;
 \c sdcdata;
 
 CREATE TABLE products (
-  seller varchar(255)
+  id serial NOT NULL,
+  seller varchar(255),
+  PRIMARY KEY (id)
 );
 
 CREATE TABLE reviews (
+  id serial NOT NULL,
+  productId int,
   rating int,
   review text,
   username varchar(255),
@@ -17,8 +21,12 @@ CREATE TABLE reviews (
   goodValue boolean,
   goodQuality boolean,
   helpful int,
-  notHelpful int
+  notHelpful int,
+  PRIMARY KEY (id)
 );
 
-COPY reviews FROM '/Users/taylorgeorge/Desktop/HackReactor/reviews/reviewsData.csv' DELIMITER ',' CSV;
-COPY products FROM '/Users/taylorgeorge/Desktop/HackReactor/reviews/productsData.csv' DELIMITER ',' CSV;
+COPY products (seller)
+FROM '/Users/taylorgeorge/Desktop/HackReactor/reviews/productsData.csv' DELIMITER ',' CSV;
+
+COPY reviews (productId, rating, review, username, createdAt, verified, wouldRecommend, goodValue, goodQuality, helpful, notHelpful)
+FROM '/Users/taylorgeorge/Desktop/HackReactor/reviews/reviewsData.csv' DELIMITER ',' CSV;
