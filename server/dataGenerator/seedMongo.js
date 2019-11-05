@@ -87,7 +87,7 @@ const insertBatch = function() {
 
   for (let i = 0; i < products.length; i++) {
     products[i]._id = productIdInc;
-    docsToAdd.push(new Product(docsToAdd[i]));
+    docsToAdd.push(new Product(products[i]));
     productIdInc++;
   }
 
@@ -96,7 +96,7 @@ const insertBatch = function() {
     bypassDocumentValidation: true
   })
   .then(() => {
-    if (batchCounter < 1000) {
+    if (batchCounter < 500) {
       console.log("Finished batch " + batchCounter);
       batchCounter++;
       insertBatch();
