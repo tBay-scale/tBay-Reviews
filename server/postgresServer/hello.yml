@@ -1,0 +1,21 @@
+config:
+  target: "http://localhost:8080"
+  phases:
+    - duration: 240
+      arrivalRate: 100
+scenarios:
+  - flow:
+    - get:
+        url: "/item/?id=808080"
+  - flow:
+    - get:
+        url: "/item/?id=1808080"
+  - flow:
+    - get:
+        url: "/item/?id=2808080"
+  - flow:
+    - get:
+        url: "/item/?id=3808080"
+  - flow:
+    - get:
+        url: "/item/?id=4808080"

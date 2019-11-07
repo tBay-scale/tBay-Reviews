@@ -2,7 +2,7 @@ require('newrelic');
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const db = require('./db.js');
+const axios = require('axios');
 
 const app = express();
 
@@ -13,12 +13,16 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, "./testClient")));
 
 app.get('/item', function (req, res) {
-  db.getReviews(req.query.id, (err, item) => {
-    if (err) {
-      res.send(err);
-    } else {
-      res.send(item);
-    }
+  let id = Math.floor(Math.random() * 5000000);
+  let serverNum = Math.floor(id / 1000000);
+  let serverAddress = "http://localhost:888" + serverNum + "/item?id=" + id;
+  axios.get(serverAddress)
+  .then (response => {
+    res.send(response.data);
+  })
+  .catch (err => {
+    console.log("error");
+    res.send(err);
   })
 })
 

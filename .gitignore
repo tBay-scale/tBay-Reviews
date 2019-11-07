@@ -24,5 +24,14 @@ coverage
 build/
 dist/
 
-productsData.csv
-reviewsData.csv
+productsData0.csv
+productsData1.csv
+productsData2.csv
+productsData3.csv
+productsData4.csv
+reviewsData0.csv
+reviewsData1.csv
+reviewsData2.csv
+reviewsData3.csv
+reviewsData4.csv
+

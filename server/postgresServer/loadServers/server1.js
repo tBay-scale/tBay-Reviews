@@ -2,15 +2,13 @@ require('newrelic');
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const db = require('./db.js');
+const db = require('../shardDB/db1.js');
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(cors());
-
-app.use(express.static(path.join(__dirname, "./testClient")));
 
 app.get('/item', function (req, res) {
   db.getReviews(req.query.id, (err, item) => {
@@ -32,6 +30,6 @@ app.post('/item', function(req, res) {
   })
 })
 
-app.listen(8080, () => {
+app.listen(8881, () => {
   console.log("Listening on port 8080");
 })
